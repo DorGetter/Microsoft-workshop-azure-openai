@@ -1,5 +1,13 @@
+import os
+from dotenv import load_dotenv
+from termcolor import colored
+
+load_dotenv()
+
 def schedule_meeting(title: str, date_and_time: str, invitees: list['str']):
     """This function will schedule a new meeting"""
+    if os.getenv("VERBOSE") == "True":
+        print(colored(f"\nTool: scheduling a meeting: '{title}' at: {date_and_time}, with invitees: {invitees}\n", "blue"))
     return f"A new meeting '{title}' at: {date_and_time}, with invitees: {invitees} created sucessefully"
 
 
@@ -47,9 +55,11 @@ If any information is missing, explicitly ask for the missing fields. if user pr
 
 def send_email(to: str, subject: str, body: str, cc: list = None):
     """Simulates sending an email by returning a string with all the provided parameters."""
-    email_details = f"Email to: {to}\nSubject: {subject}\nBody: {body}"
+    email_details = f"Email to: {to}, Subject: {subject}, Body: {body}"
     if cc:
-        email_details += f"\nCC: {', '.join(cc)}"
+        email_details += f", CC: {', '.join(cc)}"
+    if os.getenv("VERBOSE") == "True":
+        print(colored(f"\nTool: creating an email: {email_details}...\n", "blue"))
     return "Email sent successfully!"
 
 
@@ -110,6 +120,8 @@ def ask_database(conn, query):
         results = str(conn.execute(query).fetchall())
     except Exception as e:
         results = f"query failed with error: {e}"
+    if os.getenv("VERBOSE") == "True":
+        print(colored(f"\nTool: asking database for: {query}\n","blue"))
     return results
 
 

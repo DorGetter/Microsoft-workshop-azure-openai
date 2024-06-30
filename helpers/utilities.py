@@ -1,4 +1,6 @@
 import pandas as pd
+from termcolor import colored
+
 def get_table_names(conn):
     """Return a list of table names."""
     table_names = []
@@ -56,6 +58,7 @@ def append_to_history(role: str, content: str, memory: list[dict], tool_id=None,
         memory.append({"role": "tool", "tool_call_id": tool_id,  "name": function_name, "content": content})
     return memory
 
+
 def create_chat_response(client, tools, memory, tool_choice="auto"):
     return client.chat.completions.create(
     model = "gpt-4-32k",
@@ -65,3 +68,14 @@ def create_chat_response(client, tools, memory, tool_choice="auto"):
     tool_choice=tool_choice,
     messages = memory
     )
+
+
+def pretty_print(response):
+    if response.choices[0].message.content:
+        msg = f"""{response.choices[0].message.role}: {response.choices[0].message.content}"""
+        if response.choices[0].message.role == "assistant":
+            print(colored(msg, 'red'))
+        if response.choices[0].message.role == "user":
+            print(colored(msg, 'green'))
+        if response.choices[0].message.role == "tool":
+            print(colored(msg, 'blue'))
