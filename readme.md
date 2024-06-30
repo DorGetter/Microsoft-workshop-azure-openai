@@ -1,4 +1,5 @@
 # Azure OpenAI Function Calling Workshop
+![Workshop Banner](assets/pic.jpg)
 
 ## Overview
 
